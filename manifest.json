@@ -1,0 +1,10 @@
+{
+  "id": "quick-cards",
+  "name": "Quick Cards 📚",
+  "version": "0.0.1",
+  "minAppVersion": "0.12.0",
+  "description": "Quick-Cards turns #Q … :: … pairs in any note into interactive flashcards with persistent grading, targeted reviews, and a session chooser when graded cards already exist.",
+  "author": "Emmanuel Fabiani",
+  "authorUrl": "https://your-site.com",
+  "main": "main.js"
+}
