@@ -5,6 +5,6 @@
   "minAppVersion": "0.12.0",
   "description": "Quick-Cards turns #Q … :: … pairs in any note into interactive flashcards with persistent grading, targeted reviews, and a session chooser when graded cards already exist.",
   "author": "Emmanuel Fabiani",
-  "authorUrl": "https://your-site.com",
+  "authorUrl": "https://github.com/HelyeFab/obsidian-quick-cards",
   "main": "main.js"
 }
