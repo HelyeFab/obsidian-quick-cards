@@ -5,7 +5,8 @@
 
 /* Launch-chooser buttons */
 .flashcard-modal .flashcard-show-btn {
-  background: #a84ae2;   /* light-blue example */
+  background: #a84ae2;
+  /* light-blue example */
   color: #fff;
   padding: 0.5em 1em;
 }
@@ -21,7 +22,9 @@
   cursor: pointer;
 }
 
-.flashcard-modal button:hover { opacity: 0.85; }
+.flashcard-modal button:hover {
+  opacity: 0.85;
+}
 
 /* -------------------------------------------------------------
    Progress indicator & next review
@@ -62,7 +65,8 @@
 .flashcard-modal .flashcard-grade {
   display: inline-block;
   padding: 0.2em 0.6em;
-  border-radius: 20px; /* Pill shape */
+  border-radius: 20px;
+  /* Pill shape */
   color: #fff;
   font-weight: 500;
   text-align: center;
@@ -70,19 +74,23 @@
 
 /* Style based on the grade value - pastel color palette */
 .flashcard-modal .flashcard-grade-again {
-  background-color: #FF9A9E; /* Pastel red for again */
+  background-color: #FF9A9E;
+  /* Pastel red for again */
 }
 
 .flashcard-modal .flashcard-grade-hard {
-  background-color: #FECA57; /* Pastel orange for hard */
+  background-color: #FECA57;
+  /* Pastel orange for hard */
 }
 
 .flashcard-modal .flashcard-grade-good {
-  background-color: #7ED99E; /* Pastel green for good */
+  background-color: #7ED99E;
+  /* Pastel green for good */
 }
 
 .flashcard-modal .flashcard-grade-easy {
-  background-color: #80C2FB; /* Pastel blue for easy */
+  background-color: #80C2FB;
+  /* Pastel blue for easy */
 }
 
 .flashcard-modal .flashcard-answer {
@@ -100,7 +108,8 @@
   display: block;
   margin: 1em;
   padding: 6px 12px;
-  background: #A5B4FC; /* Pastel purple */
+  background: #A5B4FC;
+  /* Pastel purple */
   color: #fff;
   font-weight: 500;
 }
@@ -134,23 +143,50 @@
     margin-bottom: 0.5em;
   }
 
+  /* Summary container for mobile */
+  .flashcard-modal .summary-container {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
   /* Summary container buttons on mobile */
   .flashcard-modal .summary-container button {
-    flex: 1 1 40%;
+    flex: 1 1 auto;
+    width: 85%;
+    max-width: 300px;
     margin-bottom: 0.5em;
   }
 }
 
 /* Consistent pastel colors for buttons */
-.flashcard-modal .flashcard-btn-again { background: #FF9A9E; /* Pastel red */ }
-.flashcard-modal .flashcard-btn-hard  { background: #FECA57; /* Pastel orange */ }
-.flashcard-modal .flashcard-btn-good  { background: #7ED99E; /* Pastel green */ }
-.flashcard-modal .flashcard-btn-easy  { background: #80C2FB; /* Pastel blue */ }
+.flashcard-modal .flashcard-btn-again {
+  background: #FF9A9E;
+  /* Pastel red */
+}
+
+.flashcard-modal .flashcard-btn-hard {
+  background: #FECA57;
+  /* Pastel orange */
+}
+
+.flashcard-modal .flashcard-btn-good {
+  background: #7ED99E;
+  /* Pastel green */
+}
+
+.flashcard-modal .flashcard-btn-easy {
+  background: #80C2FB;
+  /* Pastel blue */
+}
 
 /* -------------------------------------------------------------
    SummaryModal
 ------------------------------------------------------------- */
-.flashcard-modal h3 { margin-bottom: 0.75em; }
+.flashcard-modal h3 {
+  margin-bottom: 0.75em;
+}
+
 .flashcard-modal .summary-title {
   text-align: center;
   color: var(--text-accent);
@@ -183,6 +219,7 @@
   flex-wrap: wrap;
   gap: 0.75em;
   margin: 1em 0;
+  width: 100%;
 }
 
 .flashcard-modal .summary-container button {
@@ -193,10 +230,25 @@
 }
 
 /* Apply consistent pastel palette to summary buttons too */
-.flashcard-modal .summary-container .flashcard-btn-again { background: #FF9A9E; /* Pastel red */ }
-.flashcard-modal .summary-container .flashcard-btn-hard  { background: #FECA57; /* Pastel orange */ }
-.flashcard-modal .summary-container .flashcard-btn-good  { background: #7ED99E; /* Pastel green */ }
-.flashcard-modal .summary-container .flashcard-btn-easy  { background: #80C2FB; /* Pastel blue */ }
+.flashcard-modal .summary-container .flashcard-btn-again {
+  background: #FF9A9E;
+  /* Pastel red */
+}
+
+.flashcard-modal .summary-container .flashcard-btn-hard {
+  background: #FECA57;
+  /* Pastel orange */
+}
+
+.flashcard-modal .summary-container .flashcard-btn-good {
+  background: #7ED99E;
+  /* Pastel green */
+}
+
+.flashcard-modal .summary-container .flashcard-btn-easy {
+  background: #80C2FB;
+  /* Pastel blue */
+}
 
 /* -------------------------------------------------------------
    Control-buttons row (Reset + Done)
@@ -207,10 +259,26 @@
   gap: 1em;
   margin-top: 2em;
   margin-bottom: 0.5em;
+  width: 100%;
+}
+
+/* Media query for control buttons on mobile */
+@media screen and (max-width: 480px) {
+  .flashcard-modal .summary-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .flashcard-modal .summary-controls button {
+    width: 85%;
+    max-width: 300px;
+    margin-bottom: 0.5em;
+  }
 }
 
 .flashcard-modal .summary-reset-btn {
-  background: #FF9A9E; /* Pastel red to match "again" */
+  background: #9292f0;
+  /* Pastel red to match "again" */
   color: #fff;
   padding: 0.7em 1.5em;
   font-weight: 500;
@@ -219,7 +287,8 @@
 }
 
 .flashcard-modal .summary-done-btn {
-  background: #7ED99E; /* Pastel green to match "good" */
+  background: #009395;
+  /* Pastel green to match "good" */
   color: #fff;
   padding: 0.7em 1.5em;
   font-weight: 500;
@@ -236,23 +305,26 @@
   font-size: 1em;
   color: var(--text-normal);
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 
 /* Launch-chooser buttons - matching pastel palette */
 .flashcard-modal .flashcard-graded-btn {
-  background: #DCD3FF;   /* Pastel purple */
+  background: #DCD3FF;
+  /* Pastel purple */
   color: #555;
 }
 
 .flashcard-modal .flashcard-all-btn {
-  background: #80C2FB;   /* Pastel blue */
+  background: #80C2FB;
+  /* Pastel blue */
   color: #fff;
 }
 
 .flashcard-modal .flashcard-stats-btn {
-  background: #95E1D3;   /* Pastel teal */
+  background: #95E1D3;
+  /* Pastel teal */
   color: #555;
 }
 

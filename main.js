@@ -154,8 +154,18 @@ class LaunchModal extends Modal {
   constructor(app, all, graded, plugin) { super(app); this.all = all; this.graded = graded; this.plugin = plugin; }
   onOpen() {
     this.contentEl.addClass('flashcard-modal');
-    this.contentEl.createEl('h3', { text: 'Flashcards – choose session' });
+    this.contentEl.createEl('h3', { text: '📚 Flashcards – choose session' });
+
+    // Add a container with mobile-friendly class
     const row = this.contentEl.createEl('div', { cls: 'summary-container' });
+
+    // Check if we're on mobile
+    const isMobile = window.innerWidth <= 480;
+
+    // Add appropriate spacing for mobile if needed
+    if (isMobile) {
+      row.style.width = '100%';
+    }
 
     // Show "Review due" button if there are cards due for review
     if (this.graded.length) {
@@ -185,7 +195,19 @@ class LaunchModal extends Modal {
 // =============================================================================
 class FlashcardModal extends Modal {
   constructor(app, cards, plugin) { super(app); this.cards = cards; this.plugin = plugin; this.idx = 0; }
-  onOpen() { this.contentEl.addClass('flashcard-modal'); this.render(); }
+  onOpen() {
+    this.contentEl.addClass('flashcard-modal');
+
+    // Check if we're on mobile
+    const isMobile = window.innerWidth <= 480;
+
+    // Add appropriate mobile styles if needed
+    if (isMobile) {
+      this.contentEl.style.width = '100%';
+    }
+
+    this.render();
+  }
 
   // Helper function to render basic markdown formatting
   renderMarkdown(text) {
@@ -282,7 +304,7 @@ class SummaryModal extends Modal {
     this.contentEl.addClass('flashcard-modal');
 
     // Add a centered title
-    this.contentEl.createEl('h3', { text: 'Review Summary', cls: 'summary-title' });
+    this.contentEl.createEl('h3', { text: '🤓 Review Summary', cls: 'summary-title' });
 
     // Organize cards into buckets by grade
     const buckets = { again: [], hard: [], good: [], easy: [] };
@@ -292,6 +314,9 @@ class SummaryModal extends Modal {
         buckets[cardData.grade].push(c);
       }
     });
+
+    // Check if we're on mobile
+    const isMobile = window.innerWidth <= 480;
 
     // Statistics section with improved prominence
     const stats = this.contentEl.createEl('div', { cls: 'flashcard-stats' });
@@ -309,6 +334,11 @@ class SummaryModal extends Modal {
 
     // Container for review buttons - only create if there are cards to review
     const row = this.contentEl.createEl('div', { cls: 'summary-container' });
+
+    // Add appropriate spacing for mobile if needed
+    if (isMobile) {
+      row.style.width = '100%';
+    }
 
     // Add buttons for each non-empty category
     let hasReviewButtons = false;
