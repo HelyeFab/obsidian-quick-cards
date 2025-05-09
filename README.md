@@ -1,15 +1,20 @@
-# 🃏 Quick-Cards
+# 🃏 Quick Cards
 
-> An Obsidian plugin that turns any note with `#Q question :: answer` pairs into an interactive flashcard deck!
+> An Obsidian plugin that turns any note with `#Q question :: answer` pairs into an interactive flashcard deck with spaced repetition!
 
 ## ✨ Features
 
 - 🔄 **One-click study** – Run the *Start Flashcards* command to step through cards in the current note
-- 📊 **Grading & spaced review** – Mark each card *Again / Hard / Good / Easy*; grades are saved so you can focus on the tough ones next time
-- 🔍 **Session chooser** – If the note already has graded cards, you can review *only graded* (opens a summary you can drill into) or *all* cards from scratch
-- 📈 **End-of-session summary** – See counts for each grade and jump straight into a targeted review round
-- 🔄 **Reset anytime** – Clear all saved grades with one button
-- 🎨 **Theme integration** – Completely self-contained (no external services) and styled to match your theme via an included `styles.css`
+- 📊 **Smart spaced repetition** – Advanced scheduling algorithm based on your confidence level (Again/Hard/Good/Easy)
+- 🧠 **Optimized learning** – Cards you find difficult appear more frequently; well-known cards appear at increasing intervals
+- 👁️ **Progress tracking** – See which card you're on with the "Card X of Y" indicator
+- 📅 **Review scheduling** – "Next review in X days" indicators show when you'll see each card again
+- 🔍 **Intelligent sessions** – Review only cards that are due today, or study all cards
+- 📈 **Enhanced statistics** – View due cards count and review summaries
+- 📱 **Mobile-friendly** – Responsive layout works well on all devices
+- ✨ **Markdown support** – Cards properly render **bold** and *italic* text
+- 🔐 **Data safety** – Confirmation dialog when resetting card data
+- 🎨 **Theme integration** – Completely self-contained and styled to match your Obsidian theme
 
 ## 💡 Use Cases
 
