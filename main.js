@@ -1,10 +1,10 @@
 const { Plugin, Modal, Notice } = require('obsidian');
 
 // =============================================================================
-// Quick Cards Plugin – v0.5 (spaced repetition for Obsidian)
+// Quick Flashcards Plugin – v0.5 (spaced repetition for Obsidian)
 // =============================================================================
 
-class QuickCardsPlugin extends Plugin {
+class QuickFlashcardsPlugin extends Plugin {
   async onload() {
     // 1️⃣ ribbon icon in the left sidebar
     this.addRibbonIcon('hop', 'Start Flashcards', () => this.startFlashcards());
@@ -22,7 +22,7 @@ class QuickCardsPlugin extends Plugin {
           this.cardData = rawData;
         } else {
           // If invalid, create a new structure but log a warning
-          console.warn("Quick Cards: Invalid data format detected. Creating new data structure.");
+          console.warn("Quick Flashcards: Invalid data format detected. Creating new data structure.");
           this.cardData = { cards: {}, backups: [] };
 
           // Try to recover what we can from the invalid data
@@ -50,7 +50,7 @@ class QuickCardsPlugin extends Plugin {
         this.grades = null;
       }
     } catch (error) {
-      console.error("Quick Cards: Error loading data", error);
+      console.error("Quick Flashcards: Error loading data", error);
       new Notice("Error loading flashcard data. Using empty data set.");
       this.cardData = { cards: {}, backups: [] };
     }
@@ -65,7 +65,7 @@ class QuickCardsPlugin extends Plugin {
   async injectStyles() {
     const id = 'flashcard-plugin-styles';
     if (document.getElementById(id)) return;
-    const path = `.obsidian/plugins/${this.manifest.id}/styles.css`;
+    const path = `.obsidian/plugins/quick-flashcards/styles.css`;
     const file = this.app.vault.getAbstractFileByPath(path);
     let css = '';
     if (file) try { css = await this.app.vault.read(file); } catch {/* ignore */ }
@@ -180,7 +180,7 @@ class QuickCardsPlugin extends Plugin {
 
       // Safety check for input
       if (!s || typeof s !== 'string') {
-        console.error("Quick Cards: Invalid content for parsing");
+        console.error("Quick Flashcards: Invalid content for parsing");
         return [];
       }
 
@@ -211,14 +211,14 @@ class QuickCardsPlugin extends Plugin {
             });
           }
         } catch (sectionError) {
-          console.error("Quick Cards: Error parsing section", sectionError);
+          console.error("Quick Flashcards: Error parsing section", sectionError);
           // Continue with next section instead of failing the whole parse
           continue;
         }
       }
       return arr;
     } catch (error) {
-      console.error("Quick Cards: Error parsing cards", error);
+      console.error("Quick Flashcards: Error parsing cards", error);
       return [];
     }
   }
@@ -287,10 +287,10 @@ class QuickCardsPlugin extends Plugin {
       }
 
       await this.saveData(this.cardData);
-      console.log("Quick Cards: Backup created successfully");
+      console.log("Quick Flashcards: Backup created successfully");
       return true;
     } catch (error) {
-      console.error("Quick Cards: Failed to create backup", error);
+      console.error("Quick Flashcards: Failed to create backup", error);
       return false;
     }
   }
@@ -317,7 +317,7 @@ class QuickCardsPlugin extends Plugin {
       new Notice(`Restored from backup (${new Date(backup.timestamp).toLocaleString()})`);
       return true;
     } catch (error) {
-      console.error("Quick Cards: Failed to restore from backup", error);
+      console.error("Quick Flashcards: Failed to restore from backup", error);
       new Notice("Error restoring from backup");
       return false;
     }
@@ -763,7 +763,7 @@ class SummaryModal extends Modal {
         const backupSuccess = await this.plugin.createBackup();
         if (!backupSuccess) {
           // If backup fails, warn user but allow them to proceed
-          console.warn("Quick Cards: Backup creation failed before reset operation");
+          console.warn("Quick Flashcards: Backup creation failed before reset operation");
           const proceedAnyway = confirm("Warning: Backup creation failed. Do you want to proceed with reset anyway?");
           if (!proceedAnyway) return;
         }
@@ -793,7 +793,7 @@ class SummaryModal extends Modal {
           new Notice('No cards to reset in this file');
         }
       } catch (error) {
-        console.error("Quick Cards: Error during reset operation", error);
+        console.error("Quick Flashcards: Error during reset operation", error);
         new Notice("Error resetting card data");
       }
 
@@ -807,4 +807,4 @@ class SummaryModal extends Modal {
   onClose() { this.contentEl.empty(); }
 }
 
-module.exports = QuickCardsPlugin;
+module.exports = QuickFlashcardsPlugin;

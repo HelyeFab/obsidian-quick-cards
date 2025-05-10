@@ -1,10 +1,10 @@
 {
-  "id": "quick-cards",
-  "name": "Quick Cards 📚",
+  "id": "quick-flashcards",
+  "name": "Quick Flashcards 📚",
   "version": "1.0.0",
   "minAppVersion": "0.12.0",
-  "description": "Quick-Cards turns #Q … :: … pairs in any note into interactive flashcards with persistent grading, targeted reviews, and a session chooser when graded cards already exist.",
+  "description": "Quick Flashcards turns #Q … :: … pairs in any note into interactive flashcards with persistent grading, targeted reviews, and a session chooser when graded cards already exist.",
   "author": "Emmanuel Fabiani",
-  "authorUrl": "https://github.com/HelyeFab/obsidian-quick-cards",
+  "authorUrl": "https://github.com/HelyeFab/obsidian-quick-flashcards",
   "main": "main.js"
 }

@@ -1,4 +1,4 @@
-# 🃏 Quick Cards
+# 🃏 Quick Flashcards
 
 > An Obsidian plugin that turns any note with `#Q question :: answer` pairs into an interactive flashcard deck with spaced repetition!
 
@@ -50,7 +50,7 @@ var oldWay = "not recommended"; // Function-scoped, avoid using
 
 1. Open Obsidian Settings
 2. Go to Community Plugins and disable Safe Mode
-3. Click Browse and search for "Quick-Cards"
+3. Click Browse and search for "Quick Flashcards"
 4. Install the plugin and enable it
 
 ## 📝 License
