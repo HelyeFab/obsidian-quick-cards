@@ -1,11 +1,11 @@
 {
   "cards": {
     "🎨 What does  出る mean?": {
-      "grade": "good",
-      "interval": 3,
-      "easeFactor": 2.15,
-      "repetitions": 2,
-      "nextReview": 1747122779859
+      "grade": "hard",
+      "interval": 4,
+      "easeFactor": 2,
+      "repetitions": 3,
+      "nextReview": 1747210516518
     },
     "What is HTML?": {
       "grade": "good",
@@ -41,6 +41,20 @@
       "easeFactor": 2.5,
       "repetitions": 2,
       "nextReview": 1747122187889
+    },
+    "🎨 What does **連れて行く** mean?": {
+      "grade": "good",
+      "interval": 1,
+      "easeFactor": 2.5,
+      "repetitions": 1,
+      "nextReview": 1746951333245
+    },
+    "🎨 What does **やめる** mean?": {
+      "grade": "good",
+      "interval": 1,
+      "easeFactor": 2.5,
+      "repetitions": 1,
+      "nextReview": 1746951335609
     }
   },
   "backups": [

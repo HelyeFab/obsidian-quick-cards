@@ -283,6 +283,8 @@
   }
 }
 
+/* Removed speech-related styles */
+
 /* Apply consistent pastel palette to summary buttons too */
 .flashcard-modal .summary-container .flashcard-btn-again {
   background: #FF9A9E;

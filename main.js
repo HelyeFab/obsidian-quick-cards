@@ -9,6 +9,8 @@ class QuickCardsPlugin extends Plugin {
     // 1️⃣ ribbon icon in the left sidebar
     this.addRibbonIcon('hop', 'Start Flashcards', () => this.startFlashcards());
 
+    // Command palette entry is defined below
+
     // 2️⃣ load persisted card data with error handling and validation
     try {
       // Load the data
@@ -110,6 +112,8 @@ class QuickCardsPlugin extends Plugin {
     new LaunchModal(this.app, cards, dueCards, this).open();
   }
 
+  // Calculator methods and other functionality continue below
+
   // Calculate the next review date based on grade
   calculateNextReview(cardData, grade) {
     let interval = 0;
@@ -117,7 +121,7 @@ class QuickCardsPlugin extends Plugin {
     let repetitions = cardData.repetitions || 0;
 
     // Apply spaced repetition algorithm based on grade
-    switch(grade) {
+    switch (grade) {
       case 'again':
         // Reset
         interval = 0;
@@ -245,17 +249,17 @@ class QuickCardsPlugin extends Plugin {
 
       // Check if essential properties exist
       if (!('grade' in card) || !('nextReview' in card) ||
-          !('interval' in card) || !('easeFactor' in card) ||
-          !('repetitions' in card)) {
+        !('interval' in card) || !('easeFactor' in card) ||
+        !('repetitions' in card)) {
         return false;
       }
 
       // Type checking for properties
       if (typeof card.grade !== 'string' ||
-          typeof card.nextReview !== 'number' ||
-          typeof card.interval !== 'number' ||
-          typeof card.easeFactor !== 'number' ||
-          typeof card.repetitions !== 'number') {
+        typeof card.nextReview !== 'number' ||
+        typeof card.interval !== 'number' ||
+        typeof card.easeFactor !== 'number' ||
+        typeof card.repetitions !== 'number') {
         return false;
       }
     }
@@ -396,8 +400,8 @@ class FlashcardModal extends Modal {
       // Special case: HTML entities in non-code text that we want to preserve as actual characters
       // Only handle specific cases that we're sure should be rendered literally
       if (processedText.includes('&lt;') || processedText.includes('&gt;') ||
-          processedText.includes('&amp;') || processedText.includes('&quot;') ||
-          processedText.includes('&#039;')) {
+        processedText.includes('&amp;') || processedText.includes('&quot;') ||
+        processedText.includes('&#039;')) {
 
         // Create a temporary replacement for HTML tag-like structures to protect them during processing
         processedText = processedText.replace(/&lt;([^&]+)&gt;/g, '__HTML_TAG_START__$1__HTML_TAG_END__');
@@ -560,6 +564,8 @@ class FlashcardModal extends Modal {
     const questionEl = this.contentEl.createEl('div', { cls: 'flashcard-question' });
     questionEl.innerHTML = this.renderMarkdown(c.question);
 
+    // No controls here - removing read aloud buttons
+
     // Get card data if it exists
     const cardData = this.plugin.cardData.cards[c.question];
     if (cardData) {
@@ -587,6 +593,8 @@ class FlashcardModal extends Modal {
       // Fix HTML entities in code blocks after rendering
       this.fixCodeBlockEntities(answerEl);
 
+      // No controls here - removing read aloud buttons
+
       const row = this.contentEl.createEl('div', { cls: 'flashcard-buttons' });
       ['again', 'hard', 'good', 'easy'].forEach(g => {
         const b = row.createEl('button', { text: g[0].toUpperCase() + g.slice(1) });
@@ -596,6 +604,8 @@ class FlashcardModal extends Modal {
     };
   }
   async gradeAndNext(g) {
+    // Move to next card
+
     // Get the current card's question
     const question = this.cards[this.idx].question;
 
@@ -663,7 +673,9 @@ class FlashcardModal extends Modal {
     }
   }
 
-  onClose() { this.contentEl.empty(); }
+  onClose() {
+    this.contentEl.empty();
+  }
 }
 
 // =============================================================================
