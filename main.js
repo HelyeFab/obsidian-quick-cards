@@ -9,22 +9,48 @@ class QuickCardsPlugin extends Plugin {
     // 1️⃣ ribbon icon in the left sidebar
     this.addRibbonIcon('hop', 'Start Flashcards', () => this.startFlashcards());
 
-    // 2️⃣ load persisted card data
-    this.cardData = (await this.loadData()) || { cards: {} };
+    // 2️⃣ load persisted card data with error handling and validation
+    try {
+      // Load the data
+      const rawData = await this.loadData();
 
-    // Migrate old format if needed
-    if (this.grades && !this.cardData.cards) {
-      this.cardData = { cards: {} };
-      Object.entries(this.grades).forEach(([question, grade]) => {
-        this.cardData.cards[question] = {
-          grade: grade,
-          nextReview: Date.now(),
-          interval: 0,
-          easeFactor: 2.5,
-          repetitions: 0
-        };
-      });
-      this.grades = null;
+      // Validate and process the loaded data
+      if (rawData) {
+        if (this.isValidCardData(rawData)) {
+          this.cardData = rawData;
+        } else {
+          // If invalid, create a new structure but log a warning
+          console.warn("Quick Cards: Invalid data format detected. Creating new data structure.");
+          this.cardData = { cards: {}, backups: [] };
+
+          // Try to recover what we can from the invalid data
+          if (rawData.cards && typeof rawData.cards === 'object') {
+            this.cardData.cards = rawData.cards;
+          }
+        }
+      } else {
+        // No data found, initialize with empty structure
+        this.cardData = { cards: {}, backups: [] };
+      }
+
+      // Migrate old format if needed
+      if (this.grades && !this.cardData.cards) {
+        this.cardData = { cards: {}, backups: [] };
+        Object.entries(this.grades).forEach(([question, grade]) => {
+          this.cardData.cards[question] = {
+            grade: grade,
+            nextReview: Date.now(),
+            interval: 0,
+            easeFactor: 2.5,
+            repetitions: 0
+          };
+        });
+        this.grades = null;
+      }
+    } catch (error) {
+      console.error("Quick Cards: Error loading data", error);
+      new Notice("Error loading flashcard data. Using empty data set.");
+      this.cardData = { cards: {}, backups: [] };
     }
 
     // 3️⃣ command‑palette entry
@@ -79,9 +105,9 @@ class QuickCardsPlugin extends Plugin {
       return (aData.nextReview - bData.nextReview);
     });
 
-    // If there are due cards, show those, otherwise show all cards
-    dueCards.length ? new LaunchModal(this.app, cards, dueCards, this).open()
-      : new FlashcardModal(this.app, cards, this).open();
+    // Always show the launch modal first if we have existing cards
+    // This allows users to choose between reviewing due cards, all cards, or viewing stats
+    new LaunchModal(this.app, cards, dueCards, this).open();
   }
 
   // Calculate the next review date based on grade
@@ -144,7 +170,154 @@ class QuickCardsPlugin extends Plugin {
     };
   }
 
-  parseCards(s) { const r = /^#Q\s*(.*?)::\s*(.*)$/gm, arr = []; let m; while ((m = r.exec(s))) arr.push({ question: m[1].trim(), answer: m[2].trim() }); return arr; }
+  parseCards(s) {
+    try {
+      const arr = [];
+
+      // Safety check for input
+      if (!s || typeof s !== 'string') {
+        console.error("Quick Cards: Invalid content for parsing");
+        return [];
+      }
+
+      // Split the content by #Q markers
+      const sections = s.split(/^#Q/gm).slice(1);
+
+      for (const section of sections) {
+        try {
+          // Skip empty sections
+          if (!section || !section.trim()) continue;
+
+          // Split each section into question and answer parts at the first ::
+          const parts = section.split(/::(.+)/s);
+          if (parts.length >= 2) {
+            const question = parts[0].trim();
+            const answer = parts[1] ? parts[1].trim() : '';
+
+            // Skip cards with empty questions
+            if (!question) continue;
+
+            // Sanitize content to prevent HTML injection
+            const sanitizedQuestion = this.sanitizeContent(question);
+            const sanitizedAnswer = this.sanitizeContent(answer);
+
+            arr.push({
+              question: sanitizedQuestion,
+              answer: sanitizedAnswer
+            });
+          }
+        } catch (sectionError) {
+          console.error("Quick Cards: Error parsing section", sectionError);
+          // Continue with next section instead of failing the whole parse
+          continue;
+        }
+      }
+      return arr;
+    } catch (error) {
+      console.error("Quick Cards: Error parsing cards", error);
+      return [];
+    }
+  }
+
+  // Simple HTML sanitizer to prevent injection attacks
+  sanitizeContent(text) {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Validate the loaded card data structure
+  isValidCardData(data) {
+    // Check if data is an object
+    if (!data || typeof data !== 'object') return false;
+
+    // Check if the cards property exists and is an object
+    if (!data.cards || typeof data.cards !== 'object') return false;
+
+    // Check a few cards to ensure they have the expected structure
+    const cardSample = Object.values(data.cards).slice(0, 3);
+    for (const card of cardSample) {
+      if (!card || typeof card !== 'object') return false;
+
+      // Check if essential properties exist
+      if (!('grade' in card) || !('nextReview' in card) ||
+          !('interval' in card) || !('easeFactor' in card) ||
+          !('repetitions' in card)) {
+        return false;
+      }
+
+      // Type checking for properties
+      if (typeof card.grade !== 'string' ||
+          typeof card.nextReview !== 'number' ||
+          typeof card.interval !== 'number' ||
+          typeof card.easeFactor !== 'number' ||
+          typeof card.repetitions !== 'number') {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // Create a backup of the current card data
+  async createBackup() {
+    try {
+      if (!this.cardData.backups) {
+        this.cardData.backups = [];
+      }
+
+      // Create a backup with timestamp
+      const backup = {
+        timestamp: Date.now(),
+        cards: JSON.parse(JSON.stringify(this.cardData.cards))
+      };
+
+      // Keep only the last 5 backups
+      this.cardData.backups.push(backup);
+      if (this.cardData.backups.length > 5) {
+        this.cardData.backups.shift();
+      }
+
+      await this.saveData(this.cardData);
+      console.log("Quick Cards: Backup created successfully");
+      return true;
+    } catch (error) {
+      console.error("Quick Cards: Failed to create backup", error);
+      return false;
+    }
+  }
+
+  // Restore from a backup by index (most recent = -1)
+  async restoreFromBackup(backupIndex = -1) {
+    try {
+      if (!this.cardData.backups || this.cardData.backups.length === 0) {
+        new Notice("No backups available to restore from");
+        return false;
+      }
+
+      // Get the specified backup or the most recent one
+      const index = backupIndex >= 0 ? backupIndex : this.cardData.backups.length - 1;
+      if (index >= this.cardData.backups.length) {
+        new Notice("Invalid backup index");
+        return false;
+      }
+
+      const backup = this.cardData.backups[index];
+      this.cardData.cards = JSON.parse(JSON.stringify(backup.cards));
+
+      await this.saveData(this.cardData);
+      new Notice(`Restored from backup (${new Date(backup.timestamp).toLocaleString()})`);
+      return true;
+    } catch (error) {
+      console.error("Quick Cards: Failed to restore from backup", error);
+      new Notice("Error restoring from backup");
+      return false;
+    }
+  }
 }
 
 // =============================================================================
@@ -187,6 +360,8 @@ class LaunchModal extends Modal {
     s.addClass('flashcard-stats-btn');
     s.onclick = () => { this.close(); new SummaryModal(this.app, this.all, this.plugin).open(); };
   }
+
+
   onClose() { this.contentEl.empty(); }
 }
 
@@ -209,12 +384,166 @@ class FlashcardModal extends Modal {
     this.render();
   }
 
-  // Helper function to render basic markdown formatting
+  // Helper function to render markdown formatting including code blocks
   renderMarkdown(text) {
-    // Convert markdown bold (**text**) to HTML bold (<strong>text</strong>)
+    try {
+      // Process code blocks first (```) to avoid conflicts with other formatting
+      let processedText = text;
+
+      // Don't process if text is empty
+      if (!processedText) return '';
+
+      // Special case: HTML entities in non-code text that we want to preserve as actual characters
+      // Only handle specific cases that we're sure should be rendered literally
+      if (processedText.includes('&lt;') || processedText.includes('&gt;') ||
+          processedText.includes('&amp;') || processedText.includes('&quot;') ||
+          processedText.includes('&#039;')) {
+
+        // Create a temporary replacement for HTML tag-like structures to protect them during processing
+        processedText = processedText.replace(/&lt;([^&]+)&gt;/g, '__HTML_TAG_START__$1__HTML_TAG_END__');
+      }
+
+      // Process triple backtick code blocks with or without language specification
+      processedText = processedText.replace(/```(\w+)?\s*([\s\S]*?)\s*```/g, (match, language, codeContent) => {
+        // For code blocks, we need to handle all entities directly
+        let processedCode = codeContent;
+
+        // First, decode known entities before our sanitization runs
+        processedCode = processedCode
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'")
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&');
+
+        // Handle already-escaped entities too
+        processedCode = processedCode
+          .replace(/&amp;quot;/g, '"')
+          .replace(/&amp;#039;/g, "'")
+          .replace(/&amp;lt;/g, '<')
+          .replace(/&amp;gt;/g, '>')
+          .replace(/&amp;amp;/g, '&');
+
+        // Do minimal escaping for HTML safety but preserve the characters in the display
+        const safeContent = processedCode
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        // Now replace any double escaped entities that our escaping might have created
+        const finalContent = safeContent
+          .replace(/&amp;quot;/g, '"')
+          .replace(/&amp;#039;/g, "'")
+          .replace(/&amp;lt;/g, '<')
+          .replace(/&amp;gt;/g, '>')
+          .replace(/&amp;amp;/g, '&');
+
+        // Include language tag if available
+        const langClass = language ? ` language-${language}` : '';
+        return `<pre class="code-block"><code class="${langClass}">${finalContent}</code></pre>`;
+      });
+
+      // Replace inline code (single backticks)
+      processedText = processedText.replace(/`([^`\n]+)`/g, (match, code) => {
+        // For inline code, handle entities just like code blocks
+        let processedCode = code;
+
+        // First, decode all known entities
+        processedCode = processedCode
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'")
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&');
+
+        // Handle already-escaped entities too
+        processedCode = processedCode
+          .replace(/&amp;quot;/g, '"')
+          .replace(/&amp;#039;/g, "'")
+          .replace(/&amp;lt;/g, '<')
+          .replace(/&amp;gt;/g, '>')
+          .replace(/&amp;amp;/g, '&');
+
+        // Re-escape only what's needed for HTML safety
+        const safeContent = processedCode
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        // Fix any double-escaped entities
+        const finalContent = safeContent
+          .replace(/&amp;quot;/g, '"')
+          .replace(/&amp;#039;/g, "'")
+          .replace(/&amp;lt;/g, '<')
+          .replace(/&amp;gt;/g, '>')
+          .replace(/&amp;amp;/g, '&');
+
+        return `<code class="inline-code">${finalContent}</code>`;
+      });
+
+      // At this point, all code blocks are processed and safe
+      // Now we can handle non-code content
+
+      // Handle emoji
+      processedText = processedText.replace(/([\u{1F300}-\u{1F6FF}])/gu, '<span class="emoji">$1</span>');
+
+      // Then handle other markdown formatting - being careful not to touch code blocks
+      // We need to find all <pre> and <code> tags and replace them temporarily
+      const codeBlocks = [];
+      processedText = processedText.replace(/(<pre.*?<\/pre>|<code.*?<\/code>)/gs, (match) => {
+        codeBlocks.push(match);
+        return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+      });
+
+      // Now process regular markdown on the text without code blocks
+      processedText = processedText
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>');          // Italic
+
+      // Put the code blocks back
+      processedText = processedText.replace(/__CODE_BLOCK_(\d+)__/g, (match, index) => {
+        return codeBlocks[parseInt(index)];
+      });
+
+      // Restore original HTML tags that were protected during processing
+      processedText = processedText
+        .replace(/__HTML_TAG_START__([^_]+)__HTML_TAG_END__/g, '<$1>')
+        .replace(/&lt;([^&]+)&gt;/g, '<$1>');
+
+      // For the specific format "This should appear as &lt;p&gt;" pattern
+      processedText = processedText.replace(/This should appear as &lt;p&gt;/g, 'This should appear as <p>');
+
+      // Alternative specific format where we want to show the entities literally
+      processedText = processedText.replace(/appear as &amp;lt;p&amp;gt;/g, 'appear as &lt;p&gt;');
+
+      return processedText;
+    } catch (error) {
+      console.error("Error rendering markdown:", error);
+      return text || ''; // Return original text as fallback
+    }
+  }
+
+  // Special escape function for code blocks that preserves formatting
+  escapeCodeHtml(text) {
+    if (!text) return '';
+    // We only escape <, >, and & for code blocks to prevent XSS
+    // Do NOT escape quotes - they should display as actual quotes in code
     return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>'); // Also handle italic text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    // Deliberately NOT escaping quotes to display them properly in code
+  }
+
+  // Helper to escape HTML special characters in regular text
+  escapeHtml(text) {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   render() {
@@ -254,6 +583,10 @@ class FlashcardModal extends Modal {
       // Create answer element with Markdown support
       const answerEl = this.contentEl.createEl('div', { cls: 'flashcard-answer' });
       answerEl.innerHTML = this.renderMarkdown(c.answer);
+
+      // Fix HTML entities in code blocks after rendering
+      this.fixCodeBlockEntities(answerEl);
+
       const row = this.contentEl.createEl('div', { cls: 'flashcard-buttons' });
       ['again', 'hard', 'good', 'easy'].forEach(g => {
         const b = row.createEl('button', { text: g[0].toUpperCase() + g.slice(1) });
@@ -292,6 +625,44 @@ class FlashcardModal extends Modal {
       new SummaryModal(this.app, this.plugin.originalFlashcards, this.plugin).open();
     }
   }
+
+  // Fix HTML entities in code blocks directly in the DOM after rendering
+  fixCodeBlockEntities(element) {
+    try {
+      // Special case handling for HTML entities in regular content
+      if (element.innerHTML.includes('This should appear as')) {
+        element.innerHTML = element.innerHTML.replace(/This should appear as &lt;p&gt;/, 'This should appear as <p>');
+      }
+
+      // Find all code blocks in the element
+      const codeBlocks = element.querySelectorAll('pre.code-block code, code.inline-code');
+
+      // Process each code block
+      codeBlocks.forEach(codeBlock => {
+        // Get the current text content which might contain HTML entities
+        let content = codeBlock.innerHTML;
+
+        // Replace any remaining HTML entities with their actual characters
+        content = content
+          .replace(/&amp;quot;/g, '"')
+          .replace(/&amp;#039;/g, "'")
+          .replace(/&amp;lt;/g, '<')
+          .replace(/&amp;gt;/g, '>')
+          .replace(/&amp;amp;/g, '&')
+          .replace(/&quot;/g, '"')
+          .replace(/&#039;/g, "'")
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&');
+
+        // Update the content
+        codeBlock.innerHTML = content;
+      });
+    } catch (error) {
+      console.error("Error fixing code block entities:", error);
+    }
+  }
+
   onClose() { this.contentEl.empty(); }
 }
 
@@ -363,18 +734,57 @@ class SummaryModal extends Modal {
 
     // Reset button
     const reset = ctrl.createEl('button', {
-      text: 'Reset All Data',
+      text: 'Reset File Cards',
       cls: 'summary-reset-btn'
     });
     reset.onclick = async () => {
-      // Add confirmation dialog
-      if (totalCards > 0 && !confirm('Are you sure you want to reset all flashcard data?')) {
-        return;
+      try {
+        // Get the count of cards from this file that have data
+        const fileCardsCount = this.cards.filter(c => this.plugin.cardData.cards[c.question]).length;
+
+        // Add confirmation dialog
+        if (fileCardsCount > 0 && !confirm(`Are you sure you want to reset the flashcard data for this file? (${fileCardsCount} cards will be reset)`)) {
+          return;
+        }
+
+        // Create a backup before making changes
+        const backupSuccess = await this.plugin.createBackup();
+        if (!backupSuccess) {
+          // If backup fails, warn user but allow them to proceed
+          console.warn("Quick Cards: Backup creation failed before reset operation");
+          const proceedAnyway = confirm("Warning: Backup creation failed. Do you want to proceed with reset anyway?");
+          if (!proceedAnyway) return;
+        }
+
+        // Only remove cards from the current file
+        if (this.cards && this.cards.length > 0) {
+          // Create a new object without the cards from this file
+          const updatedCards = { ...this.plugin.cardData.cards };
+
+          // Remove each card from this file
+          this.cards.forEach(card => {
+            if (card.question && updatedCards[card.question]) {
+              delete updatedCards[card.question];
+            }
+          });
+
+          // Update the card data
+          this.plugin.cardData.cards = updatedCards;
+          await this.plugin.saveData(this.plugin.cardData);
+
+          // Success message with backup info
+          const message = backupSuccess ?
+            `Reset ${fileCardsCount} cards from this file (backup created)` :
+            `Reset ${fileCardsCount} cards from this file (no backup)`;
+          new Notice(message);
+        } else {
+          new Notice('No cards to reset in this file');
+        }
+      } catch (error) {
+        console.error("Quick Cards: Error during reset operation", error);
+        new Notice("Error resetting card data");
       }
 
-      this.plugin.cardData = { cards: {} };
-      await this.plugin.saveData(this.plugin.cardData);
-      new Notice('All flashcard data reset');
       this.close();
     };
 

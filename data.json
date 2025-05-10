@@ -1,277 +1,109 @@
 {
   "cards": {
-    "🎨 What does **昨日** mean?": {
-      "grade": "easy",
+    "🎨 What does  出る mean?": {
+      "grade": "good",
       "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079616067
+      "easeFactor": 2.15,
+      "repetitions": 2,
+      "nextReview": 1747122779859
     },
-    "🎨 What does **夜** mean?": {
+    "What is HTML?": {
+      "grade": "good",
+      "interval": 1,
+      "easeFactor": 2.3,
+      "repetitions": 1,
+      "nextReview": 1746948886423
+    },
+    "What is escaping?": {
+      "grade": "hard",
+      "interval": 1,
+      "easeFactor": 2.35,
+      "repetitions": 1,
+      "nextReview": 1746948677925
+    },
+    "Code sample": {
       "grade": "good",
       "interval": 1,
       "easeFactor": 2.5,
       "repetitions": 1,
-      "nextReview": 1746906854338
+      "nextReview": 1746948698251
     },
-    "🎨 What does **全然** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.0999999999999996,
-      "repetitions": 0,
-      "nextReview": 1746821844487
-    },
-    "🎨 What does **静か** mean?": {
+    "HTML Example": {
       "grade": "good",
-      "interval": 1,
+      "interval": 6,
+      "easeFactor": 2,
+      "repetitions": 3,
+      "nextReview": 1747381659998
+    },
+    "JavaScript Example": {
+      "grade": "good",
+      "interval": 3,
       "easeFactor": 2.5,
-      "repetitions": 1,
-      "nextReview": 1746906877717
-    },
-    "🎨 What does **宿題** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.0999999999999996,
-      "repetitions": 0,
-      "nextReview": 1746821858804
-    },
-    "🎨 What does **勉強する** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079687328
-    },
-    "🎨 What does **音楽** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079690957
-    },
-    "🎨 What does **聞く** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079696248
-    },
-    "🎨 What does **弟** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079700629
-    },
-    "🎨 What does **大声** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.0999999999999996,
-      "repetitions": 0,
-      "nextReview": 1746821873676
-    },
-    "🎨 What does **アニメ** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079716600
-    },
-    "🎨 What does **見る** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079718787
-    },
-    "🎨 What does **我慢する** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820533912
-    },
-    "🎨 What does **母** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079736425
-    },
-    "🎨 What does **料理する** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079740905
-    },
-    "🎨 What does **歌う** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079744339
-    },
-    "🎨 What does **お願いする** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820554007
-    },
-    "🎨 What does **今晩** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820560037
-    },
-    "🎨 What does **父** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079762309
-    },
-    "🎨 What does **帰る** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079767846
-    },
-    "🎨 What does **怒る** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820573237
-    },
-    "🎨 What does **図書館** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079776373
-    },
-    "🎨 What does **家** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079780401
-    },
-    "🎨 What does **静かにする** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820592718
-    },
-    "🎨 What does **消す** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820599191
-    },
-    "🎨 What does **集中する** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820608220
-    },
-    "🎨 What does **鳴る** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820612229
-    },
-    "🎨 What does **友達** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079815602
-    },
-    "🎨 What does **明日** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079821188
-    },
-    "🎨 What does **行く** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079823256
-    },
-    "🎨 What does **忙しい** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079830290
-    },
-    "🎨 What does **終わらせる** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820637161
-    },
-    "🎨 What does **飲む** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079841182
-    },
-    "🎨 What does **最後** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820649794
-    },
-    "🎨 What does **小さい** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079852447
-    },
-    "🎨 What does **声** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820657401
-    },
-    "🎨 What does **ケーキ** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079861168
-    },
-    "🎨 What does **笑う** mean?": {
-      "grade": "again",
-      "interval": 0,
-      "easeFactor": 2.3,
-      "repetitions": 0,
-      "nextReview": 1746820666780
-    },
-    "🎨 What does **食べる** mean?": {
-      "grade": "easy",
-      "interval": 3,
-      "easeFactor": 2.65,
-      "repetitions": 1,
-      "nextReview": 1747079869219
+      "repetitions": 2,
+      "nextReview": 1747122187889
     }
-  }
+  },
+  "backups": [
+    {
+      "timestamp": 1746863422815,
+      "cards": {
+        "🎨 What does  出る mean?": {
+          "grade": "again",
+          "interval": 0,
+          "easeFactor": 2.3,
+          "repetitions": 0,
+          "nextReview": 1746862053979
+        },
+        "🎨 What is a  **function** ?": {
+          "grade": "hard",
+          "interval": 5,
+          "easeFactor": 1.3,
+          "repetitions": 4,
+          "nextReview": 1747295289274
+        },
+        "🎨 How  do you declare a **function**?": {
+          "grade": "hard",
+          "interval": 5,
+          "easeFactor": 1.3,
+          "repetitions": 4,
+          "nextReview": 1747295291008
+        },
+        "What is HTML?": {
+          "grade": "good",
+          "interval": 1,
+          "easeFactor": 2.3,
+          "repetitions": 1,
+          "nextReview": 1746948886423
+        },
+        "What is escaping?": {
+          "grade": "hard",
+          "interval": 1,
+          "easeFactor": 2.35,
+          "repetitions": 1,
+          "nextReview": 1746948677925
+        },
+        "Code sample": {
+          "grade": "good",
+          "interval": 1,
+          "easeFactor": 2.5,
+          "repetitions": 1,
+          "nextReview": 1746948698251
+        },
+        "HTML Example": {
+          "grade": "good",
+          "interval": 6,
+          "easeFactor": 2,
+          "repetitions": 3,
+          "nextReview": 1747381659998
+        },
+        "JavaScript Example": {
+          "grade": "good",
+          "interval": 3,
+          "easeFactor": 2.5,
+          "repetitions": 2,
+          "nextReview": 1747122187889
+        }
+      }
+    }
+  ]
 }

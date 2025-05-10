@@ -20,7 +20,7 @@
 
 Perfect for:
 - 🔤 Quick language vocabulary drilling
-- 💻 Coding syntax practice
+- 💻 Coding syntax practice with proper code blocks (```code```)
 - 📝 Any question-answer material you keep in Obsidian
 
 ## 🔧 How to Use
@@ -35,7 +35,13 @@ Perfect for:
 ```markdown
 #Q What is the capital of France? :: Paris
 
-#Q How do you declare a variable in JavaScript? :: Using let, const, or var keywords
+#Q How do you declare a variable in JavaScript? ::
+```javascript
+// You can declare variables in JavaScript using:
+let myVariable = "value";     // Block-scoped, can be reassigned
+const myConst = "fixed";      // Block-scoped, cannot be reassigned
+var oldWay = "not recommended"; // Function-scoped, avoid using
+```
 
 #Q What is the formula for calculating the area of a circle? :: A = πr²
 ```
